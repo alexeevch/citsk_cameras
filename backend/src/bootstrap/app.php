@@ -1,18 +1,42 @@
 <?php
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
                   ->withRouting(
                       web: __DIR__.'/../routes/web.php',
+                      api: __DIR__.'/../routes/api.php',
                       commands: __DIR__.'/../routes/console.php',
                       health: '/up',
                   )
-                  ->withMiddleware(function (Middleware $middleware): void {
-                      $middleware->statefulApi();
-                  })
-                  ->withExceptions(function (Exceptions $exceptions): void {
+                  ->withMiddleware(function (Middleware $middleware) {
                       //
+                  })
+                  ->withExceptions(function (Exceptions $exceptions) {
+                      $exceptions->renderable(function (AuthenticationException $e, Request $request) {
+                          if ($request->is('api/*') || $request->wantsJson()) {
+                              return response()->json(['error' => 'Unauthenticated'],
+                                  \Symfony\Component\HttpFoundation\Response::HTTP_UNAUTHORIZED);
+                          }
+                      });
+
+                      $exceptions->renderable(function (
+                          \Symfony\Component\HttpKernel\Exception\HttpException $e,
+                          Request $request
+                      ) {
+                          $message = $e->getMessage();
+
+                          if ($e instanceof NotFoundHttpException) {
+                              $message = 'Not found';
+                          }
+
+                          if ($request->expectsJson()) {
+                              return response()->json(['success' => false, 'error' => $message], $e->getStatusCode());
+                          }
+                      });
                   })->create();
