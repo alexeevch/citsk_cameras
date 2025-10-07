@@ -4,7 +4,7 @@ namespace App\Constants;
 
 class RolesConstants
 {
-    public const string ROLE_ROOT = 'Root';
-    public const string ROLE_ADMIN = 'Admin';
-    public const string ROLE_USER = 'User';
+    public const string ROLE_ROOT = 'root';
+    public const string ROLE_ADMIN = 'admin';
+    public const string ROLE_USER = 'user';
 }
