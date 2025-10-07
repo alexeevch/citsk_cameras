@@ -1,7 +1,18 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  ssr: false,
-  modules: ["@nuxt/eslint", "@pinia/nuxt"],
-  compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  ssr: false,
+
+  runtimeConfig: {
+    public: {
+      apiUrl: import.meta.env.NUXT_API_URL ?? "",
+    },
+  },
+
+  modules: ["@nuxt/eslint", "@pinia/nuxt"],
+
+  pinia: {
+    storesDirs: [".app/stores/**"],
+  },
+
+  compatibilityDate: "2025-07-15",
 });
