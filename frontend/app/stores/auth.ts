@@ -5,6 +5,7 @@ export const useAuthStore = defineStore("auth", () => {
   const { $apiFetcher } = useNuxtApp();
 
   const user = ref<User | null>(null);
+  const authChecked = ref(false);
   const isLoading = ref(false);
   const errorMessage = ref<string | null>(null);
 
@@ -19,7 +20,7 @@ export const useAuthStore = defineStore("auth", () => {
 
       user.value = await $apiFetcher(`/auth/login`, {
         method: "POST",
-        data: $credentials,
+        body: $credentials,
       });
     } catch (e) {
       console.error(e);
@@ -35,8 +36,10 @@ export const useAuthStore = defineStore("auth", () => {
 
       user.value = await $apiFetcher<User>(`/auth/me`);
     } catch (e) {
+      user.value = null;
       console.error(e);
     } finally {
+      authChecked.value = true;
       isLoading.value = false;
     }
   }
@@ -50,6 +53,8 @@ export const useAuthStore = defineStore("auth", () => {
       user.value = null;
     } catch (e) {
       console.error(e);
+    } finally {
+      isLoading.value = false;
     }
   }
 
@@ -58,7 +63,7 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = true;
       errorMessage.value = null;
 
-      await $apiFetcher(`/auth/csrf-token`, {
+      await $apiFetcher(`/csrf/csrf-cookie`, {
         method: "GET",
       });
     } catch (e) {
@@ -71,6 +76,7 @@ export const useAuthStore = defineStore("auth", () => {
 
   return {
     user,
+    authChecked,
     isAuthenticated,
     isLoading,
     errorMessage,
