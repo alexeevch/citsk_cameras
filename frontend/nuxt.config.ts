@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     storesDirs: [".app/stores/**"],
   },
 
-  css: ["~/assets/css/style.css"],
+  css: ["~/assets/scss/style.scss"],
 
   compatibilityDate: "2025-07-15",
 });
