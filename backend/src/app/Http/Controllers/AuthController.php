@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Data\Auth\LoginData;
-use App\Data\User\UserResourceData;
 use App\Services\AuthService;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthController extends Controller
 {
     public function __construct(
         private readonly AuthService $authService
-    ) {
+    )
+    {
     }
 
     public function login(Request $request): JsonResponse
@@ -31,7 +32,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 
@@ -52,13 +53,14 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $user
+                'data' => $user,
+                'id' => session()->getId(),
             ]);
         } catch (AuthenticationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], 401);
+            ], Response::HTTP_UNAUTHORIZED);
         }
     }
 }
