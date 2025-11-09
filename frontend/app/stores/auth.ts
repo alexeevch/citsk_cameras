@@ -1,5 +1,6 @@
 import type { LoginCredentials, User } from "~/types/auth";
 import { defineStore } from "pinia";
+import type { ApiResponse } from "~/types/api";
 
 export const useAuthStore = defineStore("auth", () => {
   const { $apiFetcher } = useNuxtApp();
@@ -18,10 +19,14 @@ export const useAuthStore = defineStore("auth", () => {
 
       await updateCSRFCookie();
 
-      user.value = await $apiFetcher(`/auth/login`, {
+      const response = await $apiFetcher<ApiResponse<User>>(`/auth/login`, {
         method: "POST",
         body: $credentials,
       });
+
+      if (response.data) {
+        user.value = response.data;
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -34,7 +39,11 @@ export const useAuthStore = defineStore("auth", () => {
       isLoading.value = true;
       errorMessage.value = null;
 
-      user.value = await $apiFetcher<User>(`/auth/me`);
+      const response = await $apiFetcher<ApiResponse<User>>(`/auth/me`);
+
+      if (response.data) {
+        user.value = response.data;
+      }
     } catch (e) {
       user.value = null;
       console.error(e);

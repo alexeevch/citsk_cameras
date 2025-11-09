@@ -12,16 +12,19 @@
     "lintfix": "eslint . --fix && prettier --write --list-different ."
   },
   "dependencies": {
+    "@nuxt/image": "^2.0.0",
     "@pinia/nuxt": "^0.11.2",
     "@primeuix/themes": "^1.2.5",
     "@primevue/forms": "^4.4.0",
+    "@primevue/themes": "^4.4.1",
+    "@vueuse/core": "^14.0.0",
     "nuxt": "^4.1.2",
     "pinia": "^3.0.3",
     "primeicons": "^7.0.0",
     "primevue": "^4.4.0",
     "vue": "^3.5.22",
     "vue-router": "^4.5.1",
-    "vue-yandex-maps": "^2.2.2",
+    "vue-yandex-maps": "^2.2.3",
     "zod": "^4.1.12"
   },
   "devDependencies": {

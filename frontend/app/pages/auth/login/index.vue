@@ -7,6 +7,7 @@ import type { FormSubmitEvent } from "@primevue/forms";
 
 definePageMeta({
   requiresAuth: false,
+  layout: false,
 });
 
 useSeoMeta({
@@ -92,7 +93,7 @@ const onFormSubmit = async (event: FormSubmitEvent) => {
         <Button
           :loading="isLoading"
           type="submit"
-          severity="secondary"
+          severity="primary"
           label="Submit"
         />
       </Form>
@@ -102,6 +103,7 @@ const onFormSubmit = async (event: FormSubmitEvent) => {
 
 <style scoped>
 .login-page {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
